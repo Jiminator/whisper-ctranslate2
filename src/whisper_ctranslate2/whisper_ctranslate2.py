@@ -1,13 +1,13 @@
 import argparse
 import os
-from .transcribe import Transcribe, TranscriptionOptions
-from .languages import LANGUAGES, TO_LANGUAGE_CODE, from_language_to_iso_code
+from transcribe import Transcribe, TranscriptionOptions
+from languages import LANGUAGES, TO_LANGUAGE_CODE, from_language_to_iso_code
 import numpy as np
 import warnings
 from typing import Union, List
-from .writers import get_writer
-from .version import __version__
-from .live import Live
+from writers import get_writer
+from version import __version__
+from live import Live
 import sys
 
 MODEL_NAMES = [
@@ -526,7 +526,6 @@ def main():
             live_input_device,
             options,
         ).inference()
-
         return
 
     transcribe = Transcribe(

@@ -1,7 +1,7 @@
 # Based on code from https://github.com/Nikorasu/LiveWhisper/blob/main/livewhisper.py
 
 import numpy as np
-from .transcribe import Transcribe, TranscriptionOptions
+from transcribe import Transcribe, TranscriptionOptions
 from typing import Union, List
 
 SampleRate = 16000  # Stream device recording frequency per second
@@ -58,6 +58,7 @@ class Live:
         self.blocks_speaking = 0
         self.buffers_to_process = []
         self.transcribe = None
+        self.count = 0
 
     @staticmethod
     def is_available():
@@ -89,8 +90,8 @@ class Live:
             return
 
         if voice:  # User speaking
-            if self.verbose:
-                print(".", end="", flush=True)
+            # if self.verbose:
+            #     print("", end="", flush=True)
             if self.waiting < 1:
                 self.buffer = self.prevblock.copy()
 
@@ -117,8 +118,8 @@ class Live:
     def process(self):
         if len(self.buffers_to_process) > 0:
             _buffer = self.buffers_to_process.pop()
-            if self.verbose:
-                print("\n\033[90mTranscribing..\033[0m")
+            # if self.verbose:
+            #     print("\n\033[90mTranscribing..\033[0m")
 
             if not self.transcribe:
                 self.transcribe = Transcribe(
@@ -139,15 +140,17 @@ class Live:
                 live=True,
                 options=self.options,
             )
-            print(f"\033[1A\033[2K\033[0G{result['text']}")
-            if not self.verbose:
-                print("")
+            
+            print(result['text'])  # Remove the last character
+            self.count += 1
+            # if not self.verbose:
+            #     print("")
 
     def listen(self):
-        print(
-            f"\033[32mLive stream device: \033[37m{sd.query_devices(device=self.input_device or sd.default.device[1])['name']}\033[0m"
-        )
-        print("\033[32mListening.. \033[37m(Ctrl+C to Quit)\033[0m")
+        # print(
+            # f"\033[32mLive stream device: \033[37m{sd.query_devices(device=self.input_device or sd.default.device[1])['name']}\033[0m"
+        # )
+        # print("\033[32mListening.. \033[37m(Ctrl+C to Quit)\033[0m")
         with sd.InputStream(
             channels=1,
             callback=self.callback,
@@ -157,11 +160,13 @@ class Live:
         ):
             while self.running:
                 self.process()
+                if self.count > 0:
+                    break
 
     def inference(self):
         try:
             self.listen()
         except (KeyboardInterrupt, SystemExit):
             pass
-        finally:
-            print("\n\033[93mQuitting..\033[0m")
+        # finally:
+        #     print("\n\033[93mQuitting..\033[0m")
