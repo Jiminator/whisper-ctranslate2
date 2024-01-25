@@ -147,10 +147,10 @@ class Live:
             #     print("")
 
     def listen(self):
+        print("USER:", end="", flush=True)
         # print(
             # f"\033[32mLive stream device: \033[37m{sd.query_devices(device=self.input_device or sd.default.device[1])['name']}\033[0m"
         # )
-        print("USER:", end="")
         with sd.InputStream(
             channels=1,
             callback=self.callback,
