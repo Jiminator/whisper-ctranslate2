@@ -389,7 +389,7 @@ def read_command_line():
 
 
 def main():
-    sys.stderr.write("USER:")
+    sys.stderr.write("USER: ")
     sys.stderr.flush()
     args = read_command_line()
     output_dir: str = args.pop("output_dir")

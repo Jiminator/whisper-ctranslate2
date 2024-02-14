@@ -195,7 +195,7 @@ class Transcribe:
                 accumated_inc += increment
                 last_pos = segment.end
                 pbar.update(increment)
-
+        all_text = all_text[1:]
         return dict(
             text=all_text,
             segments=list_segments,
