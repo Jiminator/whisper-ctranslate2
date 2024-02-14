@@ -1,1 +1,1 @@
-python3 ./src/whisper_ctranslate2/whisper_ctranslate2.py --live_transcribe True --language en --model base.en --live_volume_threshold 0.025
+python3 ./whisper-ctranslate2/src/whisper_ctranslate2/whisper_ctranslate2.py --live_transcribe True --language en --model base.en --live_volume_threshold 0.025 > tmpfile
